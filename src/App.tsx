@@ -4,6 +4,8 @@ import SignUp  from "./pages/AuthPage/SignUp"
 import PageLayout from "./layout/PageLayout"
 import Login from "./pages/AuthPage/Login"
 import Reset from "./pages/AuthPage/Reset"
+import ProfilePage from "./pages/ProfilePage/ProfilePage"
+
 // import Search from "./components/Sidebar/Search"
 function App() {
  
@@ -16,6 +18,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/reset" element={<Reset />} />
         <Route path="/" element={<HomePage />} />
+        <Route path="/:username" element={<ProfilePage />} />
         {/* <Route path="/search" element={<Search />} /> */}
       </Routes>
     </PageLayout>

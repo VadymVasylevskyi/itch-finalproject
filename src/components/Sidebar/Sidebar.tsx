@@ -58,9 +58,9 @@ export default function SideBar() {
       <Box
         height={"100vh"}
         width="340px"  
-        borderRight={"1px solid #000"}
+        borderRight={"1px solid #ddd"}
         py={8}
-        position={"fixed"}
+        position={"sticky"}
         top={0}
         left={0}
         px={{ base: 2, md: 4 }}
@@ -231,9 +231,8 @@ export default function SideBar() {
               height: "100vh",
               backgroundColor: "white",
               zIndex: 25,
-              borderLeft: "1px solid #ddd",
-              borderTopRightRadius: "16px",
-              borderBottomRightRadius: "16px",
+              borderRight: "1px solid #ddd",
+              
             }}
           >
             {activeSidebarContent === "/search" && <Search />}
