@@ -1,20 +1,33 @@
 import { Box, Button, Flex, Image, Input, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../../store/slices/authSlice";
+import { RootState } from "../../../store";
 
 export default function AuthForm() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { loading } = useSelector((state: RootState) => state.auth); // используем loading для индикации
     const [inputs, setInputs] = useState({
         email: '',
         password: '',
     });
 
-    const handleAuth = () => {
+    const handleAuth = async () => {
         if (!inputs.email || !inputs.password) {
             alert('Please fill all fields');
             return;
         }
-        navigate('/');
+        // Диспатчим экшен login
+        const result = await dispatch(login({ email: inputs.email, password: inputs.password }));
+
+        // Проверяем успешность входа и навигируем на главную страницу
+        if (result.meta.requestStatus === 'fulfilled') {
+            navigate('/');
+        } else {
+            alert("Login failed. Please check your credentials.");
+        }
     };
 
     const handleForgotPassword = () => {
@@ -44,7 +57,14 @@ export default function AuthForm() {
                         onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
                     />
 
-                    <Button w={"full"} colorScheme="blue" size={'sm'} fontSize={14} onClick={handleAuth}>
+                    <Button
+                        w={"full"}
+                        colorScheme="blue"
+                        size={'sm'}
+                        fontSize={14}
+                        onClick={handleAuth}
+                        isLoading={loading}  // показываем загрузку
+                    >
                         Login
                     </Button>
                     <Flex alignItems={"center"} justifyContent={"center"} my={4} gap={1} w={'full'}>

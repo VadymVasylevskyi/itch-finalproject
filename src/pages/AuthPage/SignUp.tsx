@@ -1,6 +1,7 @@
-import { Flex, Container, Box, Image, VStack, Input, Button, Text } from '@chakra-ui/react';
+import { Flex, Container, Box, Image, VStack, Input, Button, Text, InputGroup, InputRightElement } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import axios from 'axios';
 import { validation } from '../../utils/Validation.tsx';
 import BASE_URL from '../../utils/utils';
@@ -20,6 +21,8 @@ export default function SignUp() {
     username: '',
     password: '',
   });
+
+  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<{ [key in keyof SignUpInputs]?: string }>({});
 
   const handleChange = (field: keyof SignUpInputs, value: string) => {
@@ -46,10 +49,10 @@ export default function SignUp() {
         username: inputs.username,
         password: inputs.password,
       });
-
+      
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
-        navigate('/');
+        navigate('/login');
       } else {
         alert('Registration failed. Please try again.');
       }
@@ -94,14 +97,20 @@ export default function SignUp() {
                   onChange={(e) => handleChange('username', e.target.value)}
                 />
                 {errors.username && <Text color="red.500" fontSize={12}>{errors.username}</Text>}
-                
-                <Input
-                  placeholder='Password'
-                  fontSize={14}
-                  type="password"
-                  value={inputs.password}
-                  onChange={(e) => handleChange('password', e.target.value)}
-                />
+                <InputGroup>
+                  <Input
+                    placeholder='Password'
+                    fontSize={14}
+                    type={showPassword ? "text" : "password"}
+                    value={inputs.password}
+                    onChange={(e) => handleChange('password', e.target.value)}
+                  />
+                  <InputRightElement h='full'>
+					          <Button variant={"ghost"} size={"sm"} onClick={() => setShowPassword(!showPassword)}>
+						        {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+					          </Button>
+				          </InputRightElement>  
+                </InputGroup>
                 {errors.password && <Text color="red.500" fontSize={12}>{errors.password}</Text>}
 
                 <Text fontSize={12} color={'#737373'} textAlign={"center"}>

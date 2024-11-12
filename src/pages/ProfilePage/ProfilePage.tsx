@@ -1,6 +1,5 @@
 import { Container, Flex } from '@chakra-ui/react'
 import ProfileHeader from '../../components/Profile/ProfileHeader'
-import ProfileTabs from '../../components/Profile/ProfileTabs'
 import ProfilePosts from '../../components/Profile/ProfilePosts'
 
 export default function ProfilePage() {
@@ -10,7 +9,7 @@ export default function ProfilePage() {
             <ProfileHeader />
         </Flex>
         <Flex px={2} maxW={"full"} mx={"auto"} borderTop={"1px solid"} borderColor={"gray.300"} direction={"column"}>
-            <ProfileTabs />
+            
             <ProfilePosts />
         </Flex>
         

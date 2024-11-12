@@ -1,17 +1,29 @@
 import { useState } from "react";
-import { Box, Flex, Image, Link, Tooltip, Text } from "@chakra-ui/react";
-import { useLocation } from "react-router-dom";
+import { Box, Flex, Image, Link, Tooltip, Text, Button } from "@chakra-ui/react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Notifications from "./Notifications";
 import Search from "./Search";
+import { BiLogOut } from "react-icons/bi";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../store/slices/authSlice";
+
 
 export default function SideBar() {
   const [activeLink, setActiveLink] = useState<string | null>(null);
   const { pathname } = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeSidebarContent, setActiveSidebarContent] = useState<string | null>(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
+
+  
   const handleToggleSidebar = (contentId: string | null) => {
     if (contentId === "/search" || contentId === "/notifications") {
       
@@ -211,6 +223,37 @@ export default function SideBar() {
                 </Text>
               </Link>
             </Tooltip>
+
+            <Tooltip
+					hasArrow
+					label={"Logout"}
+					placement='right'
+					ml={1}
+					openDelay={500}
+					display={{ base: "block", md: "none" }}
+				>
+					<Flex
+						onClick={handleLogout}
+						alignItems={"center"}
+						gap={4}
+						_hover={{ bg: "gray.300" }}
+						borderRadius={6}
+						p={2}
+						w={{ base: 10, md: "full" }}
+						mt={"auto"}
+						justifyContent={{ base: "center", md: "flex-start" }}
+					>
+						<BiLogOut size={25} />
+						<Button
+							display={{ base: "none", md: "block" }}
+							variant={"ghost"}
+							_hover={{ bg: "transparent" }}
+							
+						>
+							Logout
+						</Button>
+					</Flex>
+				</Tooltip>
           </Flex>
         </Flex>
       </Box>
@@ -226,7 +269,7 @@ export default function SideBar() {
             style={{
               position: "fixed",
               top: 0,
-              left: "340px", // Располагаем Motionbar рядом с Sidebar
+              left: "340px", 
               width: "300px",
               height: "100vh",
               backgroundColor: "white",

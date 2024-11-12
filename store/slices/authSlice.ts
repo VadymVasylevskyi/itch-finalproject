@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/axiosConfig';
 
-// Асинхронный action для входа пользователя
-export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
+
+export const login = createAsyncThunk(`/auth/login`, async (credentials, thunkAPI) => {
     try {
-        const response = await api.post('/auth/login', credentials);
+        const response = await api.post(`/auth/login`, credentials); 
         return response.data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);
@@ -14,7 +14,7 @@ export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
-        user: null,
+        user: JSON.parse(localStorage.getItem('user')) || null,
         token: localStorage.getItem('token') || null,
         loading: false,
         error: null,
@@ -24,7 +24,8 @@ const authSlice = createSlice({
             state.user = null;
             state.token = null;
             state.error = null;
-            localStorage.removeItem('token'); // Удаляем токен
+            localStorage.removeItem('token');
+            localStorage.removeItem('user'); 
         },
     },
     extraReducers: (builder) => {
@@ -35,9 +36,14 @@ const authSlice = createSlice({
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.loading = false;
-                state.user = action.payload.user;
+                state.user = {
+                    id: action.payload.user._id,
+                    username: action.payload.user.username,
+                    email: action.payload.user.email,
+                };
                 state.token = action.payload.token;
-                localStorage.setItem('token', action.payload.token); // Сохраняем токен
+                localStorage.setItem('token', action.payload.token);
+                localStorage.setItem('user', JSON.stringify(state.user)); 
             })
             .addCase(login.rejected, (state, action) => {
                 state.loading = false;

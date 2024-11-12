@@ -30,7 +30,7 @@ export default function ProfilePost() {
 				borderColor={"whiteAlpha.300"}
 				position={"relative"}
 				aspectRatio={1 / 1}
-				// onClick={onOpen}
+				onClick={onOpen}
 			>
 				<Flex
 					opacity={0}
@@ -62,14 +62,15 @@ export default function ProfilePost() {
 					</Flex>
 				</Flex>
 
-				<Image src='/img1.png' alt='profile post' w={"100%"} h={"100%"} objectFit={"cover"} />
+				<Image src='/img2.png' alt='profile post' w={"100%"} h={"100%"} objectFit={"cover"} />
+				
 			</GridItem>
 
 			<Modal isOpen={isOpen} onClose={onClose} isCentered={true} size={{ base: "3xl", md: "5xl" }}>
 				<ModalOverlay />
 				<ModalContent>
 					<ModalCloseButton />
-					<ModalBody bg={"black"} pb={5}>
+					<ModalBody bg={"white"} pb={5}>
 						<Flex
 							gap='4'
 							w={{ base: "90%", sm: "70%", md: "full" }}
@@ -81,12 +82,12 @@ export default function ProfilePost() {
 								borderRadius={4}
 								overflow={"hidden"}
 								border={"1px solid"}
-								borderColor={"whiteAlpha.300"}
+								borderColor={"gray.300"}
 								flex={1.5}
 								justifyContent={"center"}
 								alignItems={"center"}
 							>
-								<Image src='/img1.png' alt='profile post' />
+								<Image src='/img2.png' alt='profile post' />
 							</Flex>
 							<Flex flex={1} flexDir={"column"} px={10} display={{ base: "none", md: "flex" }}>
 								<Flex alignItems={"center"} justifyContent={"space-between"}>
@@ -114,16 +115,16 @@ export default function ProfilePost() {
 								<Divider my={4} bg={"gray.500"} />
 
 								<VStack w='full' alignItems={"start"} maxH={"350px"} overflowY={"auto"}>
-									{/* CAPTION */}
+									{/* CAPTION
 									{post.caption && <Caption post={post} />}
 									{/* COMMENTS */}
-									{post.comments.map((comment) => (
+									{/* {post.comments.map((comment) => (
 										<Comment key={comment.id} comment={comment} />
-									))}
+									))} */ }
 								</VStack>
-								<Divider my={4} bg={"gray.8000"} />
+								{/* <Divider my={4} bg={"gray.8000"} />
 
-								<PostFooter isProfilePage={true} post={post} />
+								<PostFooter isProfilePage={true} post={post} /> */}
 							</Flex>
 						</Flex>
 					</ModalBody>
@@ -131,5 +132,5 @@ export default function ProfilePost() {
 			</Modal>
 		</>
 	);
-  )
+  
 }
