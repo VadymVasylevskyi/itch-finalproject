@@ -1,6 +1,18 @@
-export const timeAgo = (timestamp: number) => {
+export const timeAgo = (timestamp: Date | number | string) => {
+	// Преобразуем timestamp в миллисекунды в зависимости от его типа
+	let time: number;
+	if (typeof timestamp === 'number') {
+		time = timestamp;
+	} else if (timestamp instanceof Date) {
+		time = timestamp.getTime();
+	} else if (typeof timestamp === 'string') {
+		time = new Date(timestamp).getTime(); // Преобразуем строку в дату и затем в миллисекунды
+	} else {
+		throw new Error('Invalid timestamp format'); // Выбросим ошибку, если формат неизвестен
+	}
+
 	const now = Date.now();
-	const secondsAgo = Math.floor((now - timestamp) / 1000);
+	const secondsAgo = Math.floor((now - time) / 1000);
 
 	if (secondsAgo < 60) {
 		return `${secondsAgo}s ago`;
@@ -14,7 +26,7 @@ export const timeAgo = (timestamp: number) => {
 		const daysAgo = Math.floor(secondsAgo / 86400);
 		return `${daysAgo}d ago`;
 	} else {
-		const weeksAgo = Math.floor(secondsAgo / 604800); // 7 days in seconds
+		const weeksAgo = Math.floor(secondsAgo / 604800); // 7 дней в секундах
 		return `${weeksAgo}w ago`;
 	}
 };

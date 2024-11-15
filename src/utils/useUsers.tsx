@@ -1,24 +1,18 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../store/index";
+import { fetchUserProfile } from "../../store/slices/userProfileSlice";
 
-export function useUsers() {
-    const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(true);
+export const useUserProfile = (userId: string) => {
+    const dispatch: AppDispatch = useDispatch();
+    
+    const { userProfile, loading, error } = useSelector((state: RootState) => state.userProfile);
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const response = await axios.get('http://localhost:5005/api/user');
-                setUsers(response.data);
-            } catch (error) {
-                console.error('Error fetching users:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+        if (userId) {
+            dispatch(fetchUserProfile(userId));
+        }
+    }, [dispatch, userId]);
 
-        fetchUsers();
-    }, []);
-
-    return { users, loading };
-}
+    return { userProfile, loading, error };
+};

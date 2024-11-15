@@ -7,6 +7,7 @@ interface FetchUserProfileError {
 }
 
 interface UserProfile {
+  _id: string;
   username: string;
   email: string;
   full_name: string;
@@ -22,7 +23,7 @@ export const fetchUserProfile = createAsyncThunk<UserProfile, string, { rejectVa
   'userProfile/fetchUserProfile',
   async (userId, thunkAPI) => {
     try {
-      const response = await api.get(`/users/${userId}`);
+      const response = await api.get(`/user/${userId}`);
       return response.data;
     } catch (error) {
       if (error instanceof Error) {

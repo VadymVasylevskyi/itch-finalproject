@@ -76,7 +76,8 @@ const likePost = createAsyncThunk(
             if (!response.ok) throw new Error('Post is already liked');
             return { postId, userId };
         } catch (error) {
-            return thunkAPI.rejectWithValue(error.message || 'Failed to like post');
+            const errorMessage = error instanceof Error ? error.message : 'Failed to like post';
+            return thunkAPI.rejectWithValue(errorMessage);
         }
     }
 );

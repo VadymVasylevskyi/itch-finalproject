@@ -5,6 +5,7 @@ import api from '../../api/axiosConfig';
 export const login = createAsyncThunk(`/auth/login`, async (credentials, thunkAPI) => {
     try {
         const response = await api.post(`/auth/login`, credentials); 
+        
         return response.data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);
@@ -42,6 +43,7 @@ const authSlice = createSlice({
                     email: action.payload.user.email,
                 };
                 state.token = action.payload.token;
+                
                 localStorage.setItem('token', action.payload.token);
                 localStorage.setItem('user', JSON.stringify(state.user)); 
             })

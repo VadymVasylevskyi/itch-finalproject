@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 import { Flex, Box, Text, InputGroup, Input, InputRightElement, Button } from '@chakra-ui/react';
 import { CommentLogo, NotificationsLogo, UnlikeLogo } from '../../../utils/utils';
-import { likePost, unlikePost, fetchPostLikes } from '../../../../store/slices/postSlice';
+import { useSelector } from 'react-redux';
+import useLikes from '../../../utils/useLikePost';
 import { RootState } from '../../../../store/index';
 
 interface PostFooterProps {
@@ -13,40 +13,36 @@ interface PostFooterProps {
 }
 
 export default function PostFooter({ postId, username, caption, initialLikesCount }: PostFooterProps) {
-    const dispatch = useDispatch();
     const currentUserId = useSelector((state: RootState) => state.auth.user?.id);
 
-        const post = useSelector((state: RootState) =>
-        state.posts.userPosts.find((p) => p._id === postId) ||
-        state.posts.publicPosts.find((p) => p._id === postId)
-    );
-
+    const { likes, fetchLikes, addLike, removeLike } = useLikes();
     const [isLiked, setIsLiked] = useState(false);
-    const [likesCount, setLikesCount] = useState(post?.likes_count || initialLikesCount);
+    const [likesCount, setLikesCount] = useState(initialLikesCount);
 
-    const likedBy = post?.likedBy || []; 
+    // Загрузка лайков при монтировании компонента
+    useEffect(() => {
+        if (postId) {
+            fetchLikes(postId);
+        }
+    }, [postId]);
 
+    // Определяем, лайкнул ли текущий пользователь
     useEffect(() => {
-        if (post) {
-            dispatch(fetchPostLikes(postId)); 
+        if (likes.length > 0 && currentUserId) {
+            const liked = likes.some((like) => like.user_id === currentUserId);
+            setIsLiked(liked);
         }
-    }, [dispatch, postId]);
-    
-    useEffect(() => {
-        if (currentUserId) {
-            setIsLiked(likedBy.includes(currentUserId)); 
-        }
-    }, [currentUserId, likedBy]);
-    
-    const handleLike = () => {
-        if (!currentUserId) return;
-    
+    }, [likes, currentUserId]);
+
+    const handleLike = async () => {
+        if (!currentUserId || !postId) return;
+
         if (isLiked) {
-            dispatch(unlikePost({ postId, userId: currentUserId }));
+            await removeLike(postId, currentUserId); // Удаляем лайк через хук
             setIsLiked(false);
             setLikesCount((prevCount) => prevCount - 1);
         } else {
-            dispatch(likePost({ postId, userId: currentUserId }));
+            await addLike(postId, currentUserId); // Добавляем лайк через хук
             setIsLiked(true);
             setLikesCount((prevCount) => prevCount + 1);
         }
@@ -55,22 +51,27 @@ export default function PostFooter({ postId, username, caption, initialLikesCoun
     return (
         <Box my={10}>
             <Flex alignItems="center" gap={4} w="full" pt={0} mb={2} mt={4}>
+                {/* Кнопка лайка */}
                 <Box onClick={handleLike} cursor="pointer" fontSize={18}>
                     {!isLiked ? <NotificationsLogo /> : <UnlikeLogo />}
                 </Box>
+                {/* Иконка комментария */}
                 <Box cursor="pointer" fontSize={18}>
                     <CommentLogo />
                 </Box>
             </Flex>
+            {/* Количество лайков */}
             <Text fontWeight={600} fontSize="sm">
                 {likesCount} likes
             </Text>
+            {/* Подпись */}
             <Text fontSize="sm" fontWeight={700}>
                 {username}{' '}
                 <Text as="span" fontWeight={400}>
                     {caption}
                 </Text>
             </Text>
+            {/* Комментарии */}
             <Text fontSize="sm" color="gray.500">
                 View all comments
             </Text>

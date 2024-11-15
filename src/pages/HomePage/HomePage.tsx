@@ -1,15 +1,19 @@
-import { Flex, Box, Container } from "@chakra-ui/react"
+import { Flex, Container } from "@chakra-ui/react"
 import FeedPosts from "../../components/Sidebar/Posts/FeedPosts"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { RootState, AppDispatch } from "../../../store"
 import { useEffect } from "react"
 import { fetchUserProfile } from "../../../store/slices/userProfileSlice"
 
 export const HomePage = () => {
- const dispatch = useDispatch()
+  const userId = useSelector((state: RootState) => state.auth.user?.id);
+ const dispatch: AppDispatch = useDispatch()
 
  useEffect(() => {
-    dispatch(fetchUserProfile())
-    , [dispatch] } )
+    if (userId) {
+      dispatch(fetchUserProfile(userId));
+    }
+  }, [dispatch, userId]);
   return (
     <Container maxW={"container.lg"}>
       <Flex gap={20}>

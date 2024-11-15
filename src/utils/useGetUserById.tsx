@@ -1,8 +1,5 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUserProfile } from "../../store/slices/userProfileSlice";
-import { RootState, AppDispatch } from "../../store"; // Добавим AppDispatch
-import useShowToast from "../utils/useToast"; // Для использования тостов
+import { useState, useEffect } from 'react';
+import api from '../../api/axiosConfig'; 
 
 interface UserProfile {
     id: string;
@@ -17,42 +14,34 @@ interface UserProfile {
     created_at: Date;
 }
 
-interface UseGetUserProfileByIdReturn {
-    isLoading: boolean;
-    userProfile: UserProfile | null;
+interface useGetUserByIdState {
+    user: UserProfile | null;
+    loading: boolean;
     error: string | null;
 }
 
-const useGetUserProfileById = (userId: string): UseGetUserProfileByIdReturn => {
-    const dispatch = useDispatch<AppDispatch>(); // Типизируем dispatch
-    const showToast = useShowToast();
+const useGetUserById = (userId: string): useGetUserByIdState => {
+    const [user, setUser] = useState<UserProfile | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
-    // Получаем данные из Redux
-    const { userProfile, loading, error } = useSelector((state: RootState) => state.userProfile);
-
-    // Запрос на получение профиля пользователя при изменении userId
     useEffect(() => {
-        if (userId) {
-            dispatch(fetchUserProfile(userId)); // Диспатчим экшен для получения данных пользователя
-        }
-    }, [dispatch, userId]);
+        const fetchUserProfile = async () => {
+            try {
+                setLoading(true);
+                const response = await api.get<UserProfile>(`/user/${userId}`);
+                setUser(response.data);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'An error occurred');
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    // Показываем ошибку, если она есть
-    useEffect(() => {
-        if (error) {
-            showToast({
-                title: "Error",
-                description: error.error || "Failed to fetch user profile", // Преобразуем ошибку в строку
-                status: "error",
-            });
-        }
-    }, [error, showToast]);
+        fetchUserProfile();
+    }, [userId]);
 
-    return { 
-        isLoading: loading, 
-        userProfile, 
-        error: error?.error || null // Преобразуем ошибку в строку
-    };
+    return { user, loading, error };
 };
 
-export default useGetUserProfileById;
+export default useGetUserById;

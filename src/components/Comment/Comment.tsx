@@ -1,44 +1,41 @@
 import { Avatar, Flex, Skeleton, SkeletonCircle, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
 import { timeAgo } from "../../utils/timeAgo";
-import { RootState } from "../../../store"; // Импорт RootState из Redux store
-import { fetchUserProfile } from "../../../store/slices/userProfileSlice"; // Импорт экшена
-import { useEffect } from "react";
-const Comment = ({ comment }) => {
-    const dispatch = useDispatch();
+import useGetUserById from "../../utils/useGetUserById";
 
-    // Получаем профиль пользователя из Redux store
-    const userProfile = useSelector((state: RootState) => state.userProfile.userProfile);
-    const isLoading = !userProfile || state.userProfile.loading; // Если профиль не загружен или идет загрузка, показываем скелетон
+interface CommentProps {
+    comment: {
+        _id: string;
+        user_id: string;
+        comment_text: string;
+        created_at: string;
+    };
+}
 
-    // Если профиль еще не загружен, выполняем асинхронный запрос
-    useEffect(() => {
-        if (!userProfile && comment.createdBy) {
-            dispatch(fetchUserProfile(comment.createdBy));
-        }
-    }, [comment.createdBy, dispatch, userProfile]);
-
-    if (isLoading) return <CommentSkeleton />;
+const Comment = ({ comment }: CommentProps) => {
+    const {user_id, comment_text, created_at} = comment;
+    const {user, loading} = useGetUserById(user_id);
+    console.log(comment)
+    if (loading) return <CommentSkeleton />;
 
     return (
         <Flex gap={4}>
-            {userProfile && (
+            {user && (
                 <>
-                    <Link to={`user/${userProfile.username}`}>
-                        <Avatar src={userProfile.profile_image} size={"sm"} />
+                    <Link to={`user/${user.username}`}>
+                        <Avatar src={user.profile_image} size={"sm"} />
                     </Link>
                     <Flex direction={"column"}>
                         <Flex gap={2} alignItems={"center"}>
-                            <Link to={`/${userProfile.username}`}>
+                            <Link to={`/${user.username}`}>
                                 <Text fontWeight={"bold"} fontSize={12}>
-                                    {userProfile.username}
+                                    {user.username}
                                 </Text>
                             </Link>
-                            <Text fontSize={14}>{comment.comment}</Text>
+                            <Text fontSize={14}>{comment_text}</Text>
                         </Flex>
                         <Text fontSize={12} color={"gray"}>
-                            {timeAgo(comment.createdAt)}
+                            {timeAgo(created_at)}
                         </Text>
                     </Flex>
                 </>

@@ -1,32 +1,46 @@
-import { Box, Button, Flex, Image, Input, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, Image, Input, InputGroup, InputRightElement, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../../store/slices/authSlice";
-import { RootState } from "../../../store";
+import { RootState, AppDispatch } from "../../../store";
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import useShowToast from "../../utils/useShowToast";
 
 export default function AuthForm() {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const { loading } = useSelector((state: RootState) => state.auth); // используем loading для индикации
+    const dispatch: AppDispatch = useDispatch();
+    const { loading } = useSelector((state: RootState) => state.auth); 
     const [inputs, setInputs] = useState({
         email: '',
         password: '',
     });
+    const [showPassword, setShowPassword] = useState(false);
+    const showToast = useShowToast();
 
     const handleAuth = async () => {
         if (!inputs.email || !inputs.password) {
-            alert('Please fill all fields');
+            showToast({
+                title: 'Login failed',
+                description: 'Please fill in all fields',
+                status: 'error',
+            });
             return;
         }
-        // Диспатчим экшен login
+        
         const result = await dispatch(login({ email: inputs.email, password: inputs.password }));
 
-        // Проверяем успешность входа и навигируем на главную страницу
+        
         if (result.meta.requestStatus === 'fulfilled') {
+            console.log("Login successful:", result.payload);
             navigate('/');
         } else {
-            alert("Login failed. Please check your credentials.");
+            
+            showToast({
+                title: 'Login failed',
+                description: 'Please check your credentials',
+                status: 'error',
+            });
         }
     };
 
@@ -49,14 +63,20 @@ export default function AuthForm() {
                         value={inputs.email}
                         onChange={(e) => setInputs({ ...inputs, email: e.target.value })}
                     />
+                    <InputGroup>
                     <Input
                         placeholder='Password'
                         fontSize={14}
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         value={inputs.password}
                         onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
                     />
-
+                    <InputRightElement h='full'>
+					          <Button variant={"ghost"} size={"sm"} onClick={() => setShowPassword(!showPassword)}>
+						        {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+					          </Button>
+				          </InputRightElement>
+                    </InputGroup>
                     <Button
                         w={"full"}
                         colorScheme="blue"
