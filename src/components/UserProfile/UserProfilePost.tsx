@@ -10,7 +10,7 @@ import useLikes from "../../utils/useLikePost";
 import ProfilePostModal from "../Sidebar/Posts/PostModal";
 import api from "../../../api/axiosConfig";
 
-export default function ProfilePost(post) {
+export default function UserProfilePost(post) {
   const userId = useSelector((state: RootState) => state.auth.user?.id);
   const { userProfile } = useUserProfile(userId);
   const { isOpen, onOpen, onClose } = useDisclosure();

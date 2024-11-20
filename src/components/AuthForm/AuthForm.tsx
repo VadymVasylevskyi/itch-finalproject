@@ -54,7 +54,7 @@ export default function AuthForm() {
 
     return (
         <>
-            <Box border={"1px solid gray"} borderRadius={4} padding={5}>
+            <Box border={"1px solid gray"} borderRadius={4} padding={5} minW={"300px"}>
                 <VStack spacing={4}>
                     <Image src='/logo-large.svg' h={24} cursor={"pointer"} alt='Ichgkam' />
                     <Input

@@ -15,13 +15,13 @@ interface UserProfile {
 }
 
 interface useGetUserByIdState {
-    user: UserProfile | null;
+    userProfile: UserProfile | null;
     loading: boolean;
     error: string | null;
 }
 
 const useGetUserById = (userId: string): useGetUserByIdState => {
-    const [user, setUser] = useState<UserProfile | null>(null);
+    const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -30,7 +30,7 @@ const useGetUserById = (userId: string): useGetUserByIdState => {
             try {
                 setLoading(true);
                 const response = await api.get<UserProfile>(`/user/${userId}`);
-                setUser(response.data);
+                setUserProfile(response.data);
             } catch (err) {
                 setError(err instanceof Error ? err.message : 'An error occurred');
             } finally {
@@ -41,7 +41,7 @@ const useGetUserById = (userId: string): useGetUserByIdState => {
         fetchUserProfile();
     }, [userId]);
 
-    return { user, loading, error };
+    return { userProfile, loading, error };
 };
 
 export default useGetUserById;

@@ -10,9 +10,10 @@ interface PostFooterProps {
     username: string;
     caption: string;
     initialLikesCount: number;
+    postOwnerId: string;
 }
 
-export default function PostFooter({ postId, username, caption, initialLikesCount }: PostFooterProps) {
+export default function PostFooter({ postId, username, caption, initialLikesCount, postOwnerId }: PostFooterProps) {
     const currentUserId = useSelector((state: RootState) => state.auth.user?.id);
 
     const { likes, fetchLikes, addLike, removeLike } = useLikes();
@@ -42,7 +43,7 @@ export default function PostFooter({ postId, username, caption, initialLikesCoun
             setIsLiked(false);
             setLikesCount((prevCount) => prevCount - 1);
         } else {
-            await addLike(postId, currentUserId); // Добавляем лайк через хук
+            await addLike(postId, currentUserId, postOwnerId); // Добавляем лайк через хук
             setIsLiked(true);
             setLikesCount((prevCount) => prevCount + 1);
         }

@@ -1,4 +1,4 @@
-import { Flex, Container } from "@chakra-ui/react"
+import { Flex, Container, Grid, GridItem } from "@chakra-ui/react"
 import FeedPosts from "../../components/Sidebar/Posts/FeedPosts"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState, AppDispatch } from "../../../store"
@@ -16,12 +16,15 @@ export const HomePage = () => {
   }, [dispatch, userId]);
   return (
     <Container maxW={"container.lg"}>
-      <Flex gap={20}>
-        
+      <Grid templateColumns='repeat(2, 1fr)' gap={6}>
+        <GridItem w='100%'>
           <FeedPosts />
+        </GridItem>
+        
+          
         
       
-      </Flex>
+      </Grid>
     </Container>
   )
 }

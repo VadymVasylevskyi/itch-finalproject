@@ -6,7 +6,7 @@ export default function Login() {
       <Container maxW={"container.md"} padding={0}>
         <Flex justifyContent={"center"} alignItems={"center"} gap={5}>
           <Box display={{base:"none", md:"block"}}>
-            <Image src="/auth.png" h={580} alt='smartphone' />
+            <Image src="/auth.png" h={550} alt='smartphone' />
           </Box>
           <VStack spacing={4} align={"stretch"}>
             <AuthForm />

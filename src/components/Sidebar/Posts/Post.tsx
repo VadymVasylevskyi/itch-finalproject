@@ -9,17 +9,20 @@ interface PostProps {
     caption: string;
     likes_count: number;
     postId: string;
+    userId: string;
+    currentUserId: string;
     
     }
 
-export default function Post({ img, username, avatar, caption, likes_count, postId }: PostProps) {
+export default function Post({ img, username, avatar, caption, likes_count, postId, userId, currentUserId }: PostProps) {
+  console.log(userId)
   return (
     <>
-    <PostHeader username={username} avatar={avatar}/>
+    <PostHeader username={username} avatar={avatar} postUserId={userId} currentUserId={currentUserId} />
     <Box my={4} borderRadius={4} overflow={"hidden"}>
         <Image src={img} />
     </Box>
-    <PostFooter username={username} caption={caption} initialLikesCount={likes_count} postId={postId} />
+    <PostFooter username={username} caption={caption} initialLikesCount={likes_count} postId={postId} postOwnerId={userId}/>
     </>
   )
 }

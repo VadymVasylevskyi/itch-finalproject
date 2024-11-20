@@ -22,12 +22,12 @@ const Comment = ({ comment }: CommentProps) => {
         <Flex gap={4}>
             {user && (
                 <>
-                    <Link to={`user/${user.username}`}>
+                    <Link to={`user/${user.user_id}`}>
                         <Avatar src={user.profile_image} size={"sm"} />
                     </Link>
                     <Flex direction={"column"}>
                         <Flex gap={2} alignItems={"center"}>
-                            <Link to={`/${user.username}`}>
+                            <Link to={`user/${user.user_id}`}>
                                 <Text fontWeight={"bold"} fontSize={12}>
                                     {user.username}
                                 </Text>
