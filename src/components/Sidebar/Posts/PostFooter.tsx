@@ -74,9 +74,9 @@ export default function PostFooter({ postId, username, caption, initialLikesCoun
             </Text>
             {/* Комментарии */}
             <Text fontSize="sm" color="gray.500">
-                View all comments
+                View all comments 
             </Text>
-            <Flex alignItems="center" gap={2} justifyContent="space-between" w="full">
+            {/* <Flex alignItems="center" gap={2} justifyContent="space-between" w="full">
                 <InputGroup>
                     <Input variant="flushed" placeholder="Add a comment..." fontSize={14} />
                     <InputRightElement>
@@ -92,7 +92,7 @@ export default function PostFooter({ postId, username, caption, initialLikesCoun
                         </Button>
                     </InputRightElement>
                 </InputGroup>
-            </Flex>
+            </Flex> */}
         </Box>
     );
 }

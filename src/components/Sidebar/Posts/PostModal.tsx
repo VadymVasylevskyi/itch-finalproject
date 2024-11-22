@@ -35,7 +35,7 @@ import {
     created_at: string;
     profile_image: string;
     user_name: string;
-    userProfile: any; // Замените `any` на точный тип, если он известен
+    userProfile: any; 
   }
   
   export default function ProfilePostModal({
@@ -58,8 +58,8 @@ import {
   
     const handleCommentSubmit = () => {
       if (commentText.trim()) {
-        handleAddComment(commentText); // Убедитесь, что эта строка не вызывает ошибок
-        setCommentText(""); // Очищаем поле после отправки
+        handleAddComment(commentText); 
+        setCommentText(""); 
       }
     };
   

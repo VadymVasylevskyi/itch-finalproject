@@ -14,22 +14,22 @@ interface CommentProps {
 
 const Comment = ({ comment }: CommentProps) => {
     const {user_id, comment_text, created_at} = comment;
-    const {user, loading} = useGetUserById(user_id);
+    const {userProfile, loading} = useGetUserById(user_id);
     console.log(comment)
     if (loading) return <CommentSkeleton />;
 
     return (
         <Flex gap={4}>
-            {user && (
+            {userProfile && (
                 <>
                     <Link to={`user/${user.user_id}`}>
-                        <Avatar src={user.profile_image} size={"sm"} />
+                        <Avatar src={userProfile.profile_image} size={"sm"} />
                     </Link>
                     <Flex direction={"column"}>
                         <Flex gap={2} alignItems={"center"}>
                             <Link to={`user/${user.user_id}`}>
                                 <Text fontWeight={"bold"} fontSize={12}>
-                                    {user.username}
+                                    {userProfile.username}
                                 </Text>
                             </Link>
                             <Text fontSize={14}>{comment_text}</Text>

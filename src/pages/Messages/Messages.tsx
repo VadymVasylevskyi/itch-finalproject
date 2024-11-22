@@ -39,7 +39,7 @@ export default function Messages(){
           <Box flex={"1"}>
             {selectedUserId ? (
               <Chat targetUserId={selectedUserId} />
-            ) : ( <Text>Select a user to chat</Text>)}
+            ) : ( <Text color={"gray.500"} textAlign={"center"} marginTop={"350px"}>Select a user to chat</Text>)}
           </Box>
         </Flex>
     );

@@ -25,7 +25,7 @@ const Chat: React.FC<ChatProps> = ({ targetUserId }) => {
   // Получение данных пользователя для отправителя и получателя
   const { userProfile: targetUserProfile } = useGetUserById(targetUserId);
   const currentUserId = useSelector((state: RootState) => state.auth.user?.id);
-  const { userProfile: currentUserProfile } = useGetUserById(currentUserId) // Замените на актуальный ID текущего пользователя
+  const { userProfile: currentUserProfile } = useGetUserById(currentUserId) 
 
   useEffect(() => {
     const newSocket = io("http://localhost:5005", {

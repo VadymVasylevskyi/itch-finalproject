@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPublicPosts } from "../../../store/slices/postSlice"; // ваш слайс
 import { RootState } from "../../../store";
 
-export default function FeedPosts() {
+export default function Explore() {
   const dispatch = useDispatch();
   const currentUserId = useSelector((state: RootState) => state.auth.user?.id);
   const { publicPosts, loading, error } = useSelector((state: RootState) => state.posts);
@@ -21,7 +21,7 @@ export default function FeedPosts() {
   if (error) return <div>{error}</div>;
   return (
     <Container maxW={"container.lg"} py={10} px={2}>
-      <Grid templateColumns='repeat(2, 1fr)' gap={6}>
+      <Grid templateColumns='repeat(2, 1fr)' gap={8}>
         
         {publicPosts.map((post) => (
           <GridItem w='100%'>

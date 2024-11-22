@@ -11,6 +11,7 @@ import UserProfilePage from "./pages/ProfilePage/UserProfilePage"
 import Messages from "./pages/Messages/Messages"
 import PublicRoute from "./components/Routes/PublicRoute"
 import PrivateRoute from "./components/Routes/PrivateRoute"
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage"
 
 // import Search from "./components/Sidebar/Search"
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="/profile/edit" element={<PrivateRoute><EditProfile /></PrivateRoute>} />
         <Route path="/user/:userId" element={<PrivateRoute><UserProfilePage /></PrivateRoute>} />
         <Route path='/messages' element={<PrivateRoute><Messages /></PrivateRoute>} />
+        <Route path="*" element={<NotFoundPage />} />
         {/* <Route path="/search" element={<Search />} /> */}
       </Routes>
     </PageLayout>
